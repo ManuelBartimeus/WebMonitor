@@ -1,0 +1,57 @@
+.sidebar-container {
+    width: 250px; 
+    height: 100vh;
+    background-color: #011a32;
+    color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.user-container {
+    width: 220px;
+    height: 70px;
+    border-radius: 5px;
+    background-color: #1d3548;
+    margin: 20px auto;
+    text-align: left;
+    padding: 15px;
+}
+
+.user-text h2{
+    color: #fff;
+    font-size: medium;
+}
+
+.user-text h3{
+    color: #596a79;
+    font-size: medium;
+}
+
+.sidebar-container hr{
+    margin: 0px 20px;
+    margin-bottom: 20px;
+    height: 2px;
+    background-color: #e2e2e2;
+    border: none;
+    width: 210px;
+    border-radius: 90px;
+    
+}
+
+.sidebar-lower-container{
+    padding: 7px 20px;
+}
+
+.icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.icon-container h4 {
+    margin: 0;
+    font-weight: 400;
+}
