@@ -49,6 +49,7 @@ const Monitor = () => {
                                 <th>URL</th>
                                 <th>Status</th>
                                 <th>Speed</th>
+                                <th>Uptime</th> {/* New Uptime Column */}
                             </tr>
                         </thead>
                         <tbody>
@@ -61,6 +62,7 @@ const Monitor = () => {
                                     <td>{server.url}</td>
                                     <td>{server.status}</td>
                                     <td>{server.speed}</td>
+                                    <td>{server.uptime}</td> {/* Display Uptime */}
                                 </tr>
                             ))}
                         </tbody>

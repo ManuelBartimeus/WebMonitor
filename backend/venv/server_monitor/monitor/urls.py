@@ -1,10 +1,11 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import ServerViewSet
+# from .views import ServerViewSet
+from .views import ServerListView
 
-router = DefaultRouter()
-router.register(r'servers', ServerViewSet)
+# router = DefaultRouter()
+# router.register(r'servers', ServerViewSet)
 
 urlpatterns = [
-    path('api/', include(router.urls)),
+    path('api/servers/', ServerListView.as_view(), name='server-list'),
 ]
