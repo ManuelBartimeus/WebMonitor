@@ -20,6 +20,10 @@ a{
   margin: auto;
 }
 
+.top-bar{
+  width: 10px;
+}
+
 @keyframes fadeIn {
   0%{
     opacity: 0;

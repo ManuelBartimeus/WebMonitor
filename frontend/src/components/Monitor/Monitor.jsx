@@ -1,76 +1,74 @@
-import React from 'react';
-import { IoMdInformationCircleOutline } from 'react-icons/io';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import './Monitor.css';
 
 const Monitor = () => {
-  const servers = [
-    { ip: '192.168.1.1', url: 'https://removebg.com', status: 'Up', speed: '120ms' },
-    { ip: '192.168.1.2', url: 'https://canva.com', status: 'Down', speed: 'N/A' },
-    { ip: '192.168.1.3', url: 'https://gridcogh.com', status: 'Up', speed: '110ms' },
-    { ip: '192.168.1.4', url: 'https://gridtel.com', status: 'Up', speed: '95ms' },
-    { ip: '192.168.1.5', url: 'https://infosysgh.com', status: 'Down', speed: 'N/A' },
-    { ip: '192.168.1.6', url: 'https://grideatsgh.com', status: 'Up', speed: '130ms' },
-    { ip: '192.168.1.7', url: 'https://firstsky.com', status: 'Up', speed: '105ms' },
-    { ip: '192.168.1.8', url: 'https://telefonika.com', status: 'Down', speed: 'N/A' },
-    { ip: '192.168.1.9', url: 'https://remoratel.org', status: 'Up', speed: '98ms' },
-    { ip: '192.168.1.1', url: 'https://removebg.com', status: 'Up', speed: '120ms' },
-    { ip: '192.168.1.2', url: 'https://canva.com', status: 'Down', speed: 'N/A' },
-    { ip: '192.168.1.3', url: 'https://gridcogh.com', status: 'Up', speed: '110ms' },
-    { ip: '192.168.1.4', url: 'https://gridtel.com', status: 'Up', speed: '95ms' },
-    { ip: '192.168.1.5', url: 'https://infosysgh.com', status: 'Down', speed: 'N/A' },
-    { ip: '192.168.1.6', url: 'https://grideatsgh.com', status: 'Up', speed: '130ms' },
-    { ip: '192.168.1.7', url: 'https://firstsky.com', status: 'Up', speed: '105ms' },
-    { ip: '192.168.1.8', url: 'https://telefonika.com', status: 'Down', speed: 'N/A' },
-    { ip: '192.168.1.9', url: 'https://remoratel.org', status: 'Up', speed: '98ms' }
-    
-];
+    const [servers, setServers] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
+    useEffect(() => {
+        const fetchServers = async () => {
+            try {
+                const response = await axios.get('http://127.0.0.1:8000/api/servers/');
+                setServers(response.data);
+            } catch (err) {
+                setError('Failed to fetch servers');
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchServers();
+    }, []);
 
-  return (
-    <div className="monitor-container">
-      <div className="header">
-        <h2>Monitoring Statistics<IoMdInformationCircleOutline /></h2>
-        <div className="header-actions">
-          <button className="add-btn">+ Add Server</button>
-          <button className="export-btn">Options</button>
+    return (
+        <div className="monitor-container">
+            <div className="header">
+                <h2>Server Monitor</h2>
+                <div className="header-actions">
+                    <button className="add-btn">Add Server</button>
+                    <button className="export-btn">Export</button>
+                </div>
+            </div>
+            <div className="filters">
+                <input type="text" placeholder="Search..." />
+                <button className="filter-btn">Filter</button>
+            </div>
+            {loading ? (
+                <p>Loading...</p>
+            ) : error ? (
+                <p>{error}</p>
+            ) : (
+                <div className="scrollable-tbody">
+                    <table className="server-table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>IP Address</th>
+                                <th>URL</th>
+                                <th>Status</th>
+                                <th>Speed</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {servers.map((server) => (
+                                <tr key={server.ip_address}>
+                                    <td>
+                                        <div className="status-dot" style={{ backgroundColor: server.status === 'Active' ? 'green' : '#801100' }}></div>
+                                    </td>
+                                    <td>{server.ip_address}</td>
+                                    <td>{server.url}</td>
+                                    <td>{server.status}</td>
+                                    <td>{server.speed}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
         </div>
-      </div>
-
-      <div className="filters">
-        <input type="text" placeholder="Quick Search" />
-        <button className="filter-btn">Filters</button>
-      </div>
-      
-      <table className="server-table">
-        <thead>
-          <tr>
-            <th></th>
-            <th>IP Address</th>
-            <th>Server URL</th>
-            <th>Status</th>
-            <th>Speed</th>
-          </tr>
-        </thead>
-      </table>
-
-      <div className="scrollable-tbody">
-        <table className="server-table">
-          <tbody>
-            {servers.map((server, index) => (
-              <tr key={index}>
-                <td><div className="status-dot"></div></td>
-                <td>{server.ip}</td>
-                <td>{server.url}</td>
-                <td>{server.status}</td>
-                <td>{server.speed}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-    </div>
-  );
+    );
 };
 
 export default Monitor;
