@@ -56,6 +56,7 @@ const Monitor = () => {
                                 <th></th>  {/* Empty Header */}
                                 <th>IP Address</th>
                                 <th>Status</th>
+                                <th>Time Log</th> {/* New Time Log Column */}
                             </tr>
                         </thead>
                         <tbody>
@@ -75,6 +76,7 @@ const Monitor = () => {
                                     </td>
                                     <td>{server.ip_address}</td>
                                     <td>{server.status}</td>
+                                    <td>{server.last_ping}</td> {/* Displaying Last Ping Time */}
                                 </tr>
                             ))}
                         </tbody>
