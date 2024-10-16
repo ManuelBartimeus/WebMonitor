@@ -1,26 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './Monitor.css';  // Assuming you have a CSS file for styles
+import './Monitor.css';
 
 const Monitor = () => {
     const [servers, setServers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const fetchServers = async () => {
+        try {
+            const response = await axios.get('http://127.0.0.1:8000/api/servers/');
+            setServers(response.data);
+        } catch (err) {
+            setError('Failed to fetch servers');
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchServers = async () => {
-            try {
-                const response = await axios.get('http://127.0.0.1:8000/api/servers/');
-                setServers(response.data);
-            } catch (err) {
-                setError('Failed to fetch servers');
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchServers();
-    }, []);
+        fetchServers(); // Initial fetch
+
+        // Set an interval to fetch server data every 5 seconds
+        const intervalId = setInterval(() => {
+            fetchServers();
+        }, 5000);
+
+        // Cleanup function to clear the interval when component unmounts
+        return () => clearInterval(intervalId);
+    }, []); // Empty dependency array means it runs once on mount
 
     return (
         <div className="monitor-container">
@@ -52,14 +61,13 @@ const Monitor = () => {
                         <tbody>
                             {servers.map((server) => (
                                 <tr key={server.ip_address}>
-                                    {/* New field with red or green dot */}
                                     <td>
                                         <div
                                             className="status-dot"
                                             style={{
-                                                backgroundColor: server.status === 'Active' ? '#049e5b' : '#cc3210',
-                                                height: '9px',
-                                                width: '9px',
+                                                backgroundColor: server.status === 'Active' ? 'green' : 'red',
+                                                height: '10px',
+                                                width: '10px',
                                                 borderRadius: '50%',
                                                 display: 'inline-block',
                                             }}
