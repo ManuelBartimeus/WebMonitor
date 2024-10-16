@@ -44,25 +44,15 @@ const Monitor = () => {
                     <table className="server-table">
                         <thead>
                             <tr>
-                                <th></th>
-                                <th>IP Address</th>
-                                <th>URL</th>
-                                <th>Status</th>
-                                <th>Speed</th>
-                                <th>Uptime</th> {/* New Uptime Column */}
+                                <th>IP Address</th>  {/* Only display IP Address */}
+                                <th>Uptime</th>     {/* Only display Uptime */}
                             </tr>
                         </thead>
                         <tbody>
                             {servers.map((server) => (
                                 <tr key={server.ip_address}>
-                                    <td>
-                                        <div className="status-dot" style={{ backgroundColor: server.status === 'Active' ? 'green' : '#801100' }}></div>
-                                    </td>
-                                    <td>{server.ip_address}</td>
-                                    <td>{server.url}</td>
-                                    <td>{server.status}</td>
-                                    <td>{server.speed}</td>
-                                    <td>{server.uptime}</td> {/* Display Uptime */}
+                                    <td>{server.ip_address}</td>  {/* Display IP Address */}
+                                    <td>{server.uptime}</td>     {/* Display Uptime */}
                                 </tr>
                             ))}
                         </tbody>

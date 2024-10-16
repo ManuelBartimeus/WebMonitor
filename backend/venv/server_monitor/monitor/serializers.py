@@ -8,10 +8,10 @@ class ServerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Server
-        fields = ['ip_address', 'url', 'status', 'speed', 'uptime']
+        fields = ['ip_address', 'uptime']  # Only return ip_address and uptime
 
     def get_uptime(self, obj):
         try:
-            return uptime.uptime()  # Assuming you're using the uptime package here
+            return uptime.uptime()
         except Exception as e:
             return "Unavailable"

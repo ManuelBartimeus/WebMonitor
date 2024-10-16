@@ -1,10 +1,8 @@
+# models.py
 from django.db import models
 
 class Server(models.Model):
-    ip_address = models.GenericIPAddressField(unique=True)
-    url = models.URLField()
-    status = models.CharField(max_length=10)
-    speed = models.CharField(max_length=10)
+    ip_address = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
-        return f"{self.ip_address} - {self.url}"
+        return self.ip_address
