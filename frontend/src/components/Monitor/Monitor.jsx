@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './Monitor.css';
+import './Monitor.css';  // Assuming you have a CSS file for styles
 
 const Monitor = () => {
     const [servers, setServers] = useState([]);
@@ -44,15 +44,29 @@ const Monitor = () => {
                     <table className="server-table">
                         <thead>
                             <tr>
-                                <th>IP Address</th>  {/* Only display IP Address */}
-                                <th>Uptime</th>     {/* Only display Uptime */}
+                                <th></th>  {/* Empty Header */}
+                                <th>IP Address</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             {servers.map((server) => (
                                 <tr key={server.ip_address}>
-                                    <td>{server.ip_address}</td>  {/* Display IP Address */}
-                                    <td>{server.uptime}</td>     {/* Display Uptime */}
+                                    {/* New field with red or green dot */}
+                                    <td>
+                                        <div
+                                            className="status-dot"
+                                            style={{
+                                                backgroundColor: server.status === 'Active' ? '#049e5b' : '#cc3210',
+                                                height: '9px',
+                                                width: '9px',
+                                                borderRadius: '50%',
+                                                display: 'inline-block',
+                                            }}
+                                        ></div>
+                                    </td>
+                                    <td>{server.ip_address}</td>
+                                    <td>{server.status}</td>
                                 </tr>
                             ))}
                         </tbody>

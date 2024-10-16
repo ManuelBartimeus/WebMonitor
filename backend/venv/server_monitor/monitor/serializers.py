@@ -1,17 +1,19 @@
 # serializers.py
-import uptime
 from rest_framework import serializers
 from .models import Server
+from ping3 import ping
 
 class ServerSerializer(serializers.ModelSerializer):
-    uptime = serializers.SerializerMethodField()
+    status = serializers.SerializerMethodField()
 
     class Meta:
         model = Server
-        fields = ['ip_address', 'uptime']  # Only return ip_address and uptime
+        fields = ['ip_address', 'status']  # Only include IP address and status
 
-    def get_uptime(self, obj):
-        try:
-            return uptime.uptime()
-        except Exception as e:
-            return "Unavailable"
+    def get_status(self, obj):
+        # Ping the IP address
+        response = ping(obj.ip_address, timeout=2)
+        if response is not None:
+            return "Active"  # Server is reachable
+        else:
+            return "Inactive"  # Server is unreachable
