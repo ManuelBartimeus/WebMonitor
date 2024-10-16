@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './Monitor.css';
+import AddServerModal from '../AddServerModal/AddServerModal';
 
 const Monitor = () => {
     const [servers, setServers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [showModal, setShowModal] = useState(false); // Corrected this line
 
     const fetchServers = async () => {
         try {
@@ -31,12 +33,24 @@ const Monitor = () => {
         return () => clearInterval(intervalId);
     }, []); // Empty dependency array means it runs once on mount
 
+    const handleAddServer = async (ipAddress) => {
+        try {
+            // Make a POST request to add the server to the backend
+            await axios.post('http://127.0.0.1:8000/api/servers/', { ip_address: ipAddress });
+            // Refresh the server list
+            const response = await axios.get('http://127.0.0.1:8000/api/servers/');
+            setServers(response.data);
+        } catch (err) {
+            console.error('Failed to add server:', err);
+        }
+    };
+
     return (
         <div className="monitor-container">
             <div className="header">
                 <h2>Server Monitor</h2>
                 <div className="header-actions">
-                    <button className="add-btn">Add Server</button>
+                    <button className="add-btn" onClick={() => setShowModal(true)}>+ Add Server</button>
                     <button className="export-btn">Export</button>
                 </div>
             </div>
@@ -66,11 +80,12 @@ const Monitor = () => {
                                         <div
                                             className="status-dot"
                                             style={{
-                                                backgroundColor: server.status === 'Active' ? 'green' : 'red',
+                                                backgroundColor: server.status === 'Active' ? '#2d712c' : '#b52e25',
                                                 height: '10px',
                                                 width: '10px',
                                                 borderRadius: '50%',
                                                 display: 'inline-block',
+                                                marginLeft: '30px',
                                             }}
                                         ></div>
                                     </td>
@@ -82,6 +97,9 @@ const Monitor = () => {
                         </tbody>
                     </table>
                 </div>
+            )}
+            {showModal && ( // Corrected this line
+                <AddServerModal onClose={() => setShowModal(false)} onAdd={handleAddServer} />
             )}
         </div>
     );

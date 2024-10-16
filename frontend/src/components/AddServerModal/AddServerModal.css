@@ -1,0 +1,49 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8); /* Darken the background more */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure the overlay is above other elements */
+}
+
+.modal {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Stronger shadow for depth */
+    width: 350px;
+    text-align: center;
+    z-index: 1001; /* Ensure the modal is above the overlay */
+    margin-left: 250px;
+}
+
+.modal h2 {
+    margin-bottom: 25px;
+}
+
+.modal input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 30px;
+    border: 1px solid #ccc;
+    border-radius: 4px; /* Rounded corners for the input */
+}
+
+.modal button {
+    margin: 5px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #007bff; /* Primary button color */
+    color: white; /* Text color for the button */
+}
+
+.modal button:hover {
+    background-color: #0056b3; /* Darken button on hover */
+}
