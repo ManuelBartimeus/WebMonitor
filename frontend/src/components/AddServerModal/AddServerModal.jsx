@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import './AddServerModal.css'; 
 import validator from 'validator'; // Import the validator package
+import axios from 'axios'; // Import axios for making API requests
 
 const AddServerModal = ({ onClose, onAdd }) => {
     const [ipAddress, setIpAddress] = useState('');
     const [errorMessage, setErrorMessage] = useState(''); // State for error message
 
-    const handleAdd = () => {
+    const handleAdd = async () => {
         // Validate the IP address
         if (!ipAddress) {
             setErrorMessage('IP Address is required.');
@@ -21,9 +22,15 @@ const AddServerModal = ({ onClose, onAdd }) => {
 
         // Reset error message and proceed to add the server
         setErrorMessage(''); // Clear any previous error messages
-        onAdd(ipAddress);
-        setIpAddress('');
-        onClose();
+        
+        try {
+            // Call the onAdd function passed as a prop to add the server
+            await onAdd(ipAddress);
+            setIpAddress(''); // Clear the input field
+            onClose(); // Close the modal
+        } catch (error) {
+            setErrorMessage('Failed to add server. Please try again.'); // Handle any errors during addition
+        }
     };
 
     return (

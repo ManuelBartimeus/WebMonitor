@@ -56,6 +56,25 @@ class ServerListView(APIView):
 
         return Response(server_data, status=status.HTTP_200_OK)
 
+    def post(self, request):
+        # Extract the IP address from the request data
+        ip_address = request.data.get('ip_address')
+
+        if not ip_address:
+            return Response({'error': 'IP Address is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if the server already exists
+        if Server.objects.filter(ip_address=ip_address).exists():
+            return Response({'error': 'Server with this IP Address already exists.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Create a new server instance
+        server = Server(ip_address=ip_address)
+
+        # Save the server to the database
+        server.save()
+
+        return Response({'ip_address': server.ip_address}, status=status.HTTP_201_CREATED)
+
     def delete(self, request, ip_address):
         try:
             server = Server.objects.get(ip_address=ip_address)
@@ -63,3 +82,4 @@ class ServerListView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Server.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+    
