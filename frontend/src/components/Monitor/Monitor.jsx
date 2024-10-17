@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './Monitor.css';
 import AddServerModal from '../AddServerModal/AddServerModal';
+import { MdOutlineDelete } from "react-icons/md";
 
 const Monitor = () => {
     const [servers, setServers] = useState([]);
@@ -14,7 +15,7 @@ const Monitor = () => {
             const response = await axios.get('http://127.0.0.1:8000/api/servers/');
             setServers(response.data);
         } catch (err) {
-            setError('Failed to fetch servers');
+            setError('Failed to fetch server data');
             console.error(err);
         } finally {
             setLoading(false);
@@ -59,7 +60,7 @@ const Monitor = () => {
                 <button className="filter-btn">Filter</button>
             </div>
             {loading ? (
-                <p>Loading...</p>
+                <p>Loading server data...</p>
             ) : error ? (
                 <p>{error}</p>
             ) : (
@@ -71,6 +72,7 @@ const Monitor = () => {
                                 <th>IP Address</th>
                                 <th>Status</th>
                                 <th>Time Log</th> {/* New Time Log Column */}
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -92,6 +94,7 @@ const Monitor = () => {
                                     <td>{server.ip_address}</td>
                                     <td>{server.status}</td>
                                     <td>{server.last_ping}</td> {/* Displaying Last Ping Time */}
+                                    <td><div className="delete-icon"><MdOutlineDelete /></div></td>
                                 </tr>
                             ))}
                         </tbody>

@@ -7,6 +7,10 @@
   overflow-x: hidden;
 }
 
+.monitor-container p{
+  margin-left: 5px;
+}
+
 .scrollable-tbody {
   height: 403px;
   overflow-y: auto;
@@ -126,4 +130,12 @@
 
 .server-table tbody tr:hover {
   background-color: #f1f1f1;
+}
+
+.delete-icon {
+  color: #9a0000;
+}
+
+.delete-icon:hover{
+  transform: scale(1.05);
 }

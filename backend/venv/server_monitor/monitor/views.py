@@ -25,3 +25,4 @@ class ServerListView(APIView):
             })
 
         return Response(server_data, status=status.HTTP_200_OK)
+
