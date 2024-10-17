@@ -1,4 +1,4 @@
-.modal-overlay {
+.export-modal {
     position: fixed;
     top: 0;
     left: 0;
@@ -11,7 +11,7 @@
     z-index: 1000; 
 }
 
-.modal {
+.export-modal-content {
     background-color: white;
     padding: 20px;
     border-radius: 8px;
@@ -22,28 +22,25 @@
     margin-left: 250px;
 }
 
-.modal h2 {
+.export-modal-content h3{
     margin-bottom: 25px;
 }
 
-.modal input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 30px;
-    border: 1px solid #ccc;
-    border-radius: 4px; 
+.export-modal-content p{
+    margin-bottom: 25px;
 }
 
-.modal button {
+.export-modal-content button {
     margin: 5px;
     padding: 10px 15px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     background-color: #007bff; 
-    color: white;
+    color: white; 
+    margin-bottom: 10px;
 }
 
-.modal button:hover {
+.export-modal-content button:hover {
     background-color: #0056b3; 
 }
