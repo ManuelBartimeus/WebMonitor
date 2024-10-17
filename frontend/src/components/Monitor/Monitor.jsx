@@ -3,6 +3,7 @@ import axios from 'axios';
 import './Monitor.css';
 import AddServerModal from '../AddServerModal/AddServerModal';
 import ExportModal from '../ExportModal/ExportModal'; // Import ExportModal
+import Search from '../Search/Search'; // Import Search component
 import { MdOutlineDelete } from "react-icons/md";
 
 const Monitor = () => {
@@ -11,6 +12,7 @@ const Monitor = () => {
     const [error, setError] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [showExportModal, setShowExportModal] = useState(false); // New state for export modal
+    const [searchTerm, setSearchTerm] = useState(''); // State for search term
 
     const fetchServers = async () => {
         try {
@@ -25,13 +27,22 @@ const Monitor = () => {
     };
 
     useEffect(() => {
+        // Load the Lottie player script
+        const script = document.createElement('script');
+        script.src = "https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs";
+        script.type = "module";
+        document.body.appendChild(script);
+
         fetchServers();
 
         const intervalId = setInterval(() => {
             fetchServers();
         }, 5000);
 
-        return () => clearInterval(intervalId);
+        return () => {
+            clearInterval(intervalId);
+            document.body.removeChild(script); // Clean up the script
+        };
     }, []);
 
     const handleAddServer = async (ipAddress) => {
@@ -44,6 +55,16 @@ const Monitor = () => {
         }
     };
 
+    // Filter servers based on the search term
+    const filteredServers = servers.filter(server => {
+        const lowerCaseSearchTerm = searchTerm.toLowerCase();
+        return (
+            server.ip_address.toLowerCase().includes(lowerCaseSearchTerm) ||
+            server.status.toLowerCase().includes(lowerCaseSearchTerm) ||
+            server.last_ping.toLowerCase().includes(lowerCaseSearchTerm)
+        );
+    });
+
     return (
         <div className="monitor-container">
             <div className="header">
@@ -54,11 +75,20 @@ const Monitor = () => {
                 </div>
             </div>
             <div className="filters">
-                <input type="text" placeholder="Search..." />
+                <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} /> 
                 <button className="filter-btn">Filter</button>
             </div>
             {loading ? (
-                <p>Loading server data...</p>
+                <div className="loading-container">
+                    <dotlottie-player 
+                        src="https://lottie.host/c7bc1931-f10a-42df-a962-6f47e6238daf/Mf2qmJCbvV.json" 
+                        background="transparent" 
+                        speed="1" 
+                        style={{ width: '400px', height: '400px' }} // Increased size
+                        loop 
+                        autoplay>
+                    </dotlottie-player>
+                </div>
             ) : error ? (
                 <p>{error}</p>
             ) : (
@@ -74,7 +104,7 @@ const Monitor = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {servers.map((server) => (
+                            {filteredServers.map((server) => (
                                 <tr key={server.ip_address}>
                                     <td>
                                         <div

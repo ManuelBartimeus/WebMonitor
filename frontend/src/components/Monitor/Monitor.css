@@ -11,6 +11,13 @@
   margin-left: 5px;
 }
 
+.loading-container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 400px; /* Adjust height based on your design */
+}
+
 .scrollable-tbody {
   height: 403px;
   overflow-y: auto;

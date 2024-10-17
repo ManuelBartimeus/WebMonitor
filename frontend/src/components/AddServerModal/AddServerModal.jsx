@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './AddServerModal.css'; // You can create this CSS file for styling
+import './AddServerModal.css'; 
 
 const AddServerModal = ({ onClose, onAdd }) => {
     const [ipAddress, setIpAddress] = useState('');
@@ -7,8 +7,8 @@ const AddServerModal = ({ onClose, onAdd }) => {
     const handleAdd = () => {
         if (ipAddress) {
             onAdd(ipAddress);
-            setIpAddress(''); // Clear the input
-            onClose(); // Close the modal
+            setIpAddress(''); 
+            onClose(); 
         }
     };
 
