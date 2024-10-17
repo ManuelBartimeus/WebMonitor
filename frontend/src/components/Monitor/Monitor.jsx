@@ -55,6 +55,16 @@ const Monitor = () => {
         }
     };
 
+    const handleDeleteServer = async (ipAddress) => {
+        try {
+            await axios.delete(`http://127.0.0.1:8000/api/servers/${ipAddress}/`);
+            // Remove the deleted server from the state
+            setServers((prevServers) => prevServers.filter(server => server.ip_address !== ipAddress));
+        } catch (err) {
+            console.error('Failed to delete server:', err);
+        }
+    };    
+
     // Filter servers based on the search term
     const filteredServers = servers.filter(server => {
         const lowerCaseSearchTerm = searchTerm.toLowerCase();
@@ -122,7 +132,11 @@ const Monitor = () => {
                                     <td>{server.ip_address}</td>
                                     <td>{server.status}</td>
                                     <td>{server.last_ping}</td>
-                                    <td><div className="delete-icon"><MdOutlineDelete /></div></td>
+                                    <td>
+                                    <div className="delete-icon" onClick={() => handleDeleteServer(server.ip_address)}>
+                                            <MdOutlineDelete />
+                                        </div>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>

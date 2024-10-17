@@ -55,3 +55,11 @@ class ServerListView(APIView):
             })
 
         return Response(server_data, status=status.HTTP_200_OK)
+
+    def delete(self, request, ip_address):
+        try:
+            server = Server.objects.get(ip_address=ip_address)
+            server.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Server.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)

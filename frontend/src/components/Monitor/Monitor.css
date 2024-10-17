@@ -141,6 +141,7 @@
 
 .delete-icon {
   color: #9a0000;
+  cursor: pointer;
 }
 
 .delete-icon:hover{
