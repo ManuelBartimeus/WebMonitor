@@ -13,9 +13,18 @@
 
 .loading-container {
   display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  height: 400px; /* Adjust height based on your design */
+  justify-content: center; 
+  align-items: center; 
+  height: 400px; 
+}
+
+.error-message-container {
+  display: flex;
+  flex-direction: column; /* Ensures Lottie animation is above the error message */
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 400px); /* Adjust height as needed */
+  text-align: center; 
 }
 
 .scrollable-tbody {
@@ -146,4 +155,13 @@
 
 .delete-icon:hover{
   transform: scale(1.05);
+}
+
+.error-message-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 300px); 
+  text-align: center;
+  color: #000000; /* Optional: Change the text color to something noticeable */
 }

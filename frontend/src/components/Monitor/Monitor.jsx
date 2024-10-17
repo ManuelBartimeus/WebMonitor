@@ -18,16 +18,20 @@ const Monitor = () => {
         try {
             const response = await axios.get('http://127.0.0.1:8000/api/servers/');
             setServers(response.data);
+            setError(null); // Clear error on successful fetch
         } catch (err) {
-            setError('Failed to fetch server data');
+            setError('Reconnecting to database...');
             console.error(err);
+            
+            setTimeout(() => {
+                fetchServers();
+            }, 500);
         } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        // Load the Lottie player script
         const script = document.createElement('script');
         script.src = "https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs";
         script.type = "module";
@@ -65,7 +69,6 @@ const Monitor = () => {
         }
     };    
 
-    // Filter servers based on the search term
     const filteredServers = servers.filter(server => {
         const lowerCaseSearchTerm = searchTerm.toLowerCase();
         return (
@@ -100,7 +103,17 @@ const Monitor = () => {
                     </dotlottie-player>
                 </div>
             ) : error ? (
-                <p>{error}</p>
+                <div className="error-message-container">
+                    <dotlottie-player 
+                        src="https://lottie.host/c7bc1931-f10a-42df-a962-6f47e6238daf/Mf2qmJCbvV.json" 
+                        background="transparent" 
+                        speed="1" 
+                        style={{ width: '350px', height: '350px' }}
+                        loop 
+                        autoplay>
+                    </dotlottie-player>
+                    <p>{error}</p>
+                </div>
             ) : (
                 <div className="scrollable-tbody">
                     <table className="server-table">
@@ -133,7 +146,7 @@ const Monitor = () => {
                                     <td>{server.status}</td>
                                     <td>{server.last_ping}</td>
                                     <td>
-                                    <div className="delete-icon" onClick={() => handleDeleteServer(server.ip_address)}>
+                                        <div className="delete-icon" onClick={() => handleDeleteServer(server.ip_address)}>
                                             <MdOutlineDelete />
                                         </div>
                                     </td>
