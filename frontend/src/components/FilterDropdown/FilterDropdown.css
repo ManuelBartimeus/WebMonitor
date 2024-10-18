@@ -1,0 +1,27 @@
+.filter-dropdown {
+    position: relative; /* Allows positioning of the filter container */
+    display: inline-block; /* Keeps dropdown inline with other elements */
+  }
+  
+  .filter-container {
+    position: absolute; /* Positions the dropdown relative to the filter button */
+    top: 100%; /* Position below the button */
+    left: 0; /* Align with the left edge of the button */
+    background-color: white; /* Background color of the dropdown */
+    border: 1px solid #ccc; /* Border for the dropdown */
+    border-radius: 4px; /* Rounded corners */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Shadow for better visibility */
+    z-index: 1000; /* Ensures dropdown appears above other elements */
+    width: 140px; /* Set a fixed width for the dropdown */
+    font-size: 13px;
+  }
+  
+  .filter-item {
+    padding: 10px;
+    cursor: pointer; /* Changes cursor on hover */
+  }
+  
+  .filter-item:hover {
+    background-color: #f1f1f1; /* Highlight on hover */
+  }
+  

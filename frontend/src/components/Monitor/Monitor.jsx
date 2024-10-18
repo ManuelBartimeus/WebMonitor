@@ -5,7 +5,7 @@ import AddServerModal from '../AddServerModal/AddServerModal';
 import ExportModal from '../ExportModal/ExportModal'; // Import ExportModal
 import Search from '../Search/Search'; // Import Search component
 import { MdOutlineDelete } from "react-icons/md";
-
+import FilterDropdown from '../FilterDropdown/FilterDropdown';
 
 const Monitor = () => {
     const [servers, setServers] = useState([]);
@@ -14,6 +14,7 @@ const Monitor = () => {
     const [showModal, setShowModal] = useState(false);
     const [showExportModal, setShowExportModal] = useState(false); // New state for export modal
     const [searchTerm, setSearchTerm] = useState(''); // State for search term
+    const [selectedFilter, setSelectedFilter] = useState('');
 
     const fetchServers = async () => {
         try {
@@ -110,7 +111,7 @@ const Monitor = () => {
             </div>
             <div className="filters">
                 <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} /> 
-                <button className="filter-btn">Filter</button>
+                <FilterDropdown onFilterSelect={setSelectedFilter} />
             </div>
             {loading ? (
                 <div className="loading-container">
