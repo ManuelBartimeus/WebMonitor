@@ -1,5 +1,5 @@
 .monitor-container {
-  padding: 30px;
+  padding: 28px;
   background-color: #f5f7fb;
   width: 1200px;
   height: 620px;
@@ -28,7 +28,7 @@
 }
 
 .scrollable-tbody {
-  height: 447px;
+  height: 462px;
   overflow-y: auto;
 }
 
@@ -100,7 +100,7 @@
 .filters {
   display: flex;
   gap: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 .filters input {
@@ -125,6 +125,7 @@
 .server-table {
   width: 100%;
   border-collapse: collapse;
+  font-size: 15px;
 }
 
 .server-table th, .server-table td {

@@ -6,6 +6,7 @@ import ExportModal from '../ExportModal/ExportModal'; // Import ExportModal
 import Search from '../Search/Search'; // Import Search component
 import { MdOutlineDelete } from "react-icons/md";
 
+
 const Monitor = () => {
     const [servers, setServers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -78,6 +79,26 @@ const Monitor = () => {
         );
     });
 
+    const getPriorityStyle = (priority) => {
+        switch (priority) {
+            case 'Critical':
+                return { border: '2px solid #900C3F', color: '#900C3F' }; 
+            case 'High Priority':
+                return { border: '2px solid #ca0c0c', color: '#ca0c0c' }; 
+            case 'Important':
+                return { border: '2px solid #044b9e', color: '#044b9e' };
+            case 'Standard':
+                return { border: '2px solid #04779e', color: '#04779e' }; 
+            case 'Low Priority':
+                return { border: '2px solid #9e5404', color: '#9e5404' }; 
+            case 'Decommissioned':
+                return { border: '2px solid #9e8004', color: '#9e8004' };
+            default:
+                return { border: '2px solid #e0e0e0', color: '#e0e0e0' }; 
+        }
+    };
+
+
     return (
         <div className="monitor-container">
             <div className="header">
@@ -148,7 +169,19 @@ const Monitor = () => {
                                     <td>{server.ip_address}</td>
                                     <td>{server.server_name}</td> 
                                     <td>{server.access_group}</td> 
-                                    <td>{server.priority}</td> 
+                                    <td>
+                                        <div style={{
+                                            ...getPriorityStyle(server.priority),
+                                            backgroundColor: 'transparent',
+                                            borderRadius: '15px',
+                                            padding: '5px 10px',
+                                            fontSize: '12px',
+                                            display: 'inline-block',
+                                            color: getPriorityStyle(server.priority).color,
+                                        }}>
+                                         {server.priority}
+                                        </div>
+                                    </td> 
                                     <td>{server.status}</td>
                                     <td>{server.last_ping}</td>
                                     <td>

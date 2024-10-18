@@ -2,10 +2,29 @@ from django.db import models
 from django.utils import timezone
 
 class Server(models.Model):
+    ACCESS_GROUP_CHOICES = [
+        ('IT Infrastructure', 'IT Infrastructure'),
+        ('Active Management', 'Active Management'),
+        ('Database Management', 'Database Management'),
+        ('Networking', 'Networking'),
+        ('Public Relations', 'Public Relations'),
+        ('Application Development', 'Application Development'),
+        ('Business Operations', 'Business Operations'),
+    ]
+
+    SERVER_LEVEL_CHOICES = [
+        ('Critical', 'Critical'),
+        ('High Priority', 'High Priority'),
+        ('Important', 'Important'),
+        ('Standard', 'Standard'),
+        ('Low Priority', 'Low Priority'),
+        ('Decommissioned', 'Decommissioned'),
+    ]
+
     ip_address = models.GenericIPAddressField(unique=True)
-    server_name = models.CharField(max_length=100)  # New field for Server Name
-    access_group = models.CharField(max_length=100)  # New field for Access Group
-    priority = models.IntegerField(default=1)  # New field for Priority
+    server_name = models.CharField(max_length=100)  # Field for Server Name
+    access_group = models.CharField(max_length=50, choices=ACCESS_GROUP_CHOICES)  # Field for Access Group with choices
+    priority = models.CharField(max_length=20, choices= SERVER_LEVEL_CHOICES)  # Field for Priority
     status = models.CharField(max_length=10, default="Unknown")  # Optional
     last_ping = models.DateTimeField(auto_now=True)
     alert_sent_at = models.DateTimeField(null=True, blank=True)  # Time of the first alert
