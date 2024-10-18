@@ -121,6 +121,9 @@ const Monitor = () => {
                             <tr>
                                 <th></th>
                                 <th>IP Address</th>
+                                <th>Server Name</th> 
+                                <th>Access Group</th> 
+                                <th>Priority</th>
                                 <th>Status</th>
                                 <th>Time Log</th>
                                 <th></th>
@@ -138,11 +141,14 @@ const Monitor = () => {
                                                 width: '10px',
                                                 borderRadius: '50%',
                                                 display: 'inline-block',
-                                                marginLeft: '30px',
+                                                marginLeft: '10px',
                                             }}
                                         ></div>
                                     </td>
                                     <td>{server.ip_address}</td>
+                                    <td>{server.server_name}</td> 
+                                    <td>{server.access_group}</td> 
+                                    <td>{server.priority}</td> 
                                     <td>{server.status}</td>
                                     <td>{server.last_ping}</td>
                                     <td>

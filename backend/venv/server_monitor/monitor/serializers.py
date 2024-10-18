@@ -1,4 +1,3 @@
-# serializers.py
 from rest_framework import serializers
 from .models import Server
 from ping3 import ping
@@ -8,7 +7,7 @@ class ServerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Server
-        fields = ['ip_address', 'status']  # Only include IP address and status
+        fields = ['ip_address', 'server_name', 'access_group', 'priority', 'status']  # Include new fields
 
     def get_status(self, obj):
         # Ping the IP address

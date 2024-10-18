@@ -3,6 +3,9 @@ from django.utils import timezone
 
 class Server(models.Model):
     ip_address = models.GenericIPAddressField(unique=True)
+    server_name = models.CharField(max_length=100)  # New field for Server Name
+    access_group = models.CharField(max_length=100)  # New field for Access Group
+    priority = models.IntegerField(default=1)  # New field for Priority
     status = models.CharField(max_length=10, default="Unknown")  # Optional
     last_ping = models.DateTimeField(auto_now=True)
     alert_sent_at = models.DateTimeField(null=True, blank=True)  # Time of the first alert
@@ -14,4 +17,4 @@ class Server(models.Model):
         self.alert_count = 0
 
     def __str__(self):
-        return self.ip_address
+        return f"{self.server_name} ({self.ip_address})"  # Update the string representation

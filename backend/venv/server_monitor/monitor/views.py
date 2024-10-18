@@ -50,6 +50,9 @@ class ServerListView(APIView):
             # Append server data to the response
             server_data.append({
                 'ip_address': server.ip_address,
+                'server_name': server.server_name,
+                'access_group': server.access_group,
+                'priority': server.priority,
                 'status': server.status,
                 'last_ping': server.last_ping.strftime('%Y-%m-%d %H:%M:%S')  # Format the timestamp
             })
