@@ -5,8 +5,8 @@
   
   .filter-container {
     position: absolute; /* Positions the dropdown relative to the filter button */
-    top: 100%; /* Position below the button */
-    left: 0; /* Align with the left edge of the button */
+    top: 0; /* Position below the button */
+    left: 110%; /* Align with the left edge of the button */
     background-color: white; /* Background color of the dropdown */
     border: 1px solid #ccc; /* Border for the dropdown */
     border-radius: 4px; /* Rounded corners */
