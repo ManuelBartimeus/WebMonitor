@@ -22,7 +22,7 @@ class ServerListView(APIView):
                 now = timezone.now()
 
                 # Check if the alert needs to be reset (after 5 minutes)
-                if server.alert_sent_at and (now - server.alert_sent_at) > timedelta(minutes=5):
+                if server.alert_sent_at and (now - server.alert_sent_at) > timedelta(minutes=30):
                     server.reset_alert()
 
                 # Define the alert degree based on the number of alerts sent
@@ -31,11 +31,11 @@ class ServerListView(APIView):
                     send_server_down_email(server.ip_address, alert_degree)
                     server.alert_sent_at = now
                     server.alert_count = 1
-                elif server.alert_count == 1 and (now - server.alert_sent_at) <= timedelta(seconds=60):
+                elif server.alert_count == 1 and (now - server.alert_sent_at) <= timedelta(seconds=18000):
                     alert_degree = "MEDIUM ALERT"
                     send_server_down_email(server.ip_address, alert_degree)
                     server.alert_count = 2
-                elif server.alert_count == 2 and (now - server.alert_sent_at) <= timedelta(seconds=60):
+                elif server.alert_count == 2 and (now - server.alert_sent_at) <= timedelta(seconds=18000):
                     alert_degree = "HIGH ALERT"
                     send_server_down_email(server.ip_address, alert_degree)
                     server.alert_count = 3
