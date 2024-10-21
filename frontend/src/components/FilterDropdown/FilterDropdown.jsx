@@ -64,6 +64,7 @@ const FilterDropdown = ({ onFilterSelect }) => {
             setSidebarVisible(true);
             setSidebarItems(filter === 'Access Group' ? accessGroupOptions : filter === 'Priority' ? priorityOptions : statusOptions);
         } else {
+            setIsOpen(false);
             setSidebarVisible(false); // Close sidebar if 'None' is selected
             onFilterSelect('', '');
         }
@@ -73,6 +74,8 @@ const FilterDropdown = ({ onFilterSelect }) => {
 
     const handleOptionSelect = (option) => {
         if (option !== 'None') {
+            setIsOpen(false);
+            setSidebarVisible(false);
             onFilterSelect(selectedFilter, option);
         }
         setSelectedFilter(option === 'None' ? 'None' : ''); // Keep 'None' in the state for clarity

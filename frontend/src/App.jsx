@@ -5,6 +5,7 @@ import Dashboard from './components/Dashboard/Dashboard';
 import Settings from './components/Settings/Settings';
 import Monitor from './components/Monitor/Monitor';
 import Home from './components/Home/Home';
+import ServerDetail from './components/ServerDetail/ServerDetail';
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
             <Route path="/Dashboard" element={<Dashboard />} />
             <Route path="/Monitor" element={<Monitor />} />
             <Route path="/Settings" element={<Settings />} />
+            <Route path="/server/:ip" element={<ServerDetail />} /> 
           </Routes>
         </div>
       </div>

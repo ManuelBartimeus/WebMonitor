@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import {Link} from 'react-router-dom';
 import './Monitor.css';
 import AddServerModal from '../AddServerModal/AddServerModal';
 import ExportModal from '../ExportModal/ExportModal';
@@ -186,8 +187,12 @@ const Monitor = () => {
                                             }}
                                         ></div>
                                     </td>
-                                    <td>{server.ip_address}</td>
-                                    <td>{server.server_name}</td> 
+                                    <td>
+                                        <Link to={`/server/${server.ip_address}`}>{server.ip_address}</Link>
+                                    </td>
+                                    <td>
+                                        <Link to={`/server/${server.ip_address}`}>{server.server_name}</Link>
+                                    </td> 
                                     <td>{server.access_group}</td> 
                                     <td>
                                         <div style={{
