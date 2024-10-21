@@ -23,21 +23,26 @@ const ServerDetail = () => {
                 <div className="stat-card">
                     <h4>Server Uptime</h4>
                     <div className="pie-chart">
-                        <img src={chart3} alt="Server Uptime Chart" />
+                        <div>
+                            <img src={chart1} alt="Server Uptime Chart" />
+                            <p>40:00</p>
+                        </div>
                     </div>
                 </div>
 
                 <div className="stat-card">
                     <h4>CPU Usage</h4>
                     <div className="pie-chart">
-                        <img src={chart1} alt="CPU Usage Chart" />
+                        <img src={chart2} alt="CPU Usage Chart" />
+                        <p>35%</p>
                     </div>
                 </div>
 
                 <div className="stat-card">
                     <h4>Disk Usage</h4>
                     <div className="pie-chart">
-                        <img src={chart1} alt="Disk Usage Chart" />
+                        <img src={chart3} alt="Disk Usage Chart" />
+                        <p>76%</p>
                     </div>
                 </div>
 

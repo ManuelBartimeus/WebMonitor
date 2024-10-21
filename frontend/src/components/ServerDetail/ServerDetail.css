@@ -61,3 +61,35 @@
     width: 70px;
     height: 70px;
   }
+
+  .pie-chart p {
+    font-size: 16px;
+  }
+
+  .downtime-section {
+    margin-top: 20px;
+}
+
+.downtime-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.downtime-table th, .downtime-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.downtime-table th {
+    background-color: #f8f9fa;
+}
+
+.downtime-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.downtime-table tr:hover {
+    background-color: #ddd;
+}
