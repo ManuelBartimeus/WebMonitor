@@ -6,41 +6,54 @@ from ping3 import ping
 from django.utils import timezone
 from datetime import timedelta
 from .utils import send_server_down_email
+from django.db.models import Q  # For complex filtering
 
 class ServerListView(APIView):
     def get(self, request):
-        servers = Server.objects.all()
-        server_data = []
+        # Extract filter parameters from request
+        access_group = request.query_params.get('access_group', None)
+        priority = request.query_params.get('priority', None)
+        status_filter = request.query_params.get('status', None)
 
+        # Base query for all servers
+        servers = Server.objects.all()
+
+        # Apply filters if provided
+        if access_group:
+            servers = servers.filter(access_group=access_group)
+        if priority:
+            servers = servers.filter(priority=priority)
+        if status_filter:
+            servers = servers.filter(status=status_filter)
+
+        # Process the server list
+        server_data = []
         for server in servers:
             # Ping the server's IP address to check the status
             response_time = ping(server.ip_address)
             server_status = 'Active' if response_time is not None else 'Inactive'
 
-            if server_status == 'Inactive':
-                # Calculate the time since the last alert was sent
-                now = timezone.now()
 
-                # Check if the alert needs to be reset (after 5 minutes)
-                if server.alert_sent_at and (now - server.alert_sent_at) > timedelta(minutes=30):
-                    server.reset_alert()
+            # if server_status == 'Inactive':
+            #     now = timezone.now()
 
-                # Define the alert degree based on the number of alerts sent
-                if server.alert_count == 0:
-                    alert_degree = "LOW ALERT"
-                    send_server_down_email(server.ip_address, alert_degree)
-                    server.alert_sent_at = now
-                    server.alert_count = 1
-                elif server.alert_count == 1 and (now - server.alert_sent_at) <= timedelta(seconds=18000):
-                    alert_degree = "MEDIUM ALERT"
-                    send_server_down_email(server.ip_address, alert_degree)
-                    server.alert_count = 2
-                elif server.alert_count == 2 and (now - server.alert_sent_at) <= timedelta(seconds=18000):
-                    alert_degree = "HIGH ALERT"
-                    send_server_down_email(server.ip_address, alert_degree)
-                    server.alert_count = 3
-                # No more alerts after the third within the first 60 seconds
-                # Wait for 5 minutes before resetting alerts
+            #     if server.alert_sent_at and (now - server.alert_sent_at) > timedelta(minutes=30):
+            #         server.reset_alert()
+
+            #     if server.alert_count == 0:
+            #         alert_degree = "LOW ALERT"
+            #         send_server_down_email(server.ip_address, alert_degree)
+            #         server.alert_sent_at = now
+            #         server.alert_count = 1
+            #     elif server.alert_count == 1 and (now - server.alert_sent_at) <= timedelta(seconds=18000):
+            #         alert_degree = "MEDIUM ALERT"
+            #         send_server_down_email(server.ip_address, alert_degree)
+            #         server.alert_count = 2
+            #     elif server.alert_count == 2 and (now - server.alert_sent_at) <= timedelta(seconds=18000):
+            #         alert_degree = "HIGH ALERT"
+            #         send_server_down_email(server.ip_address, alert_degree)
+            #         server.alert_count = 3
+
 
             # Update server status and last ping time
             server.status = server_status
@@ -85,4 +98,3 @@ class ServerListView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Server.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-    

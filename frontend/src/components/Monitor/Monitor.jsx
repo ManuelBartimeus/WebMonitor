@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './Monitor.css';
 import AddServerModal from '../AddServerModal/AddServerModal';
-import ExportModal from '../ExportModal/ExportModal'; // Import ExportModal
-import Search from '../Search/Search'; // Import Search component
+import ExportModal from '../ExportModal/ExportModal';
+import Search from '../Search/Search';
 import { MdOutlineDelete } from "react-icons/md";
 import FilterDropdown from '../FilterDropdown/FilterDropdown';
 
@@ -12,19 +12,19 @@ const Monitor = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showModal, setShowModal] = useState(false);
-    const [showExportModal, setShowExportModal] = useState(false); // New state for export modal
-    const [searchTerm, setSearchTerm] = useState(''); // State for search term
+    const [showExportModal, setShowExportModal] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
     const [selectedFilter, setSelectedFilter] = useState('');
+    const [selectedFilterValue, setSelectedFilterValue] = useState('');
 
     const fetchServers = async () => {
         try {
             const response = await axios.get('http://127.0.0.1:8000/api/servers/');
             setServers(response.data);
-            setError(null); // Clear error on successful fetch
+            setError(null);
         } catch (err) {
             setError('Reconnecting to database...');
             console.error(err);
-            
             setTimeout(() => {
                 fetchServers();
             }, 500);
@@ -47,7 +47,7 @@ const Monitor = () => {
 
         return () => {
             clearInterval(intervalId);
-            document.body.removeChild(script); // Clean up the script
+            document.body.removeChild(script);
         };
     }, []);
 
@@ -64,41 +64,52 @@ const Monitor = () => {
     const handleDeleteServer = async (ipAddress) => {
         try {
             await axios.delete(`http://127.0.0.1:8000/api/servers/${ipAddress}/`);
-            // Remove the deleted server from the state
             setServers((prevServers) => prevServers.filter(server => server.ip_address !== ipAddress));
         } catch (err) {
             console.error('Failed to delete server:', err);
         }
-    };    
+    };
 
     const filteredServers = servers.filter(server => {
         const lowerCaseSearchTerm = searchTerm.toLowerCase();
-        return (
+        const matchesSearch = (
             server.ip_address.toLowerCase().includes(lowerCaseSearchTerm) ||
             server.status.toLowerCase().includes(lowerCaseSearchTerm) ||
             server.last_ping.toLowerCase().includes(lowerCaseSearchTerm)
         );
+
+        const matchesFilter = selectedFilter && selectedFilterValue ? (
+            selectedFilter === 'Access Group' ? server.access_group === selectedFilterValue :
+            selectedFilter === 'Priority' ? server.priority === selectedFilterValue :
+            selectedFilter === 'Status' ? server.status === selectedFilterValue : true
+        ) : true;
+
+        return matchesSearch && matchesFilter;
     });
 
     const getPriorityStyle = (priority) => {
         switch (priority) {
             case 'Critical':
-                return { border: '2px solid #900C3F', color: '#900C3F' }; 
+                return { border: '2px solid #900C3F', color: '#900C3F' };
             case 'High Priority':
-                return { border: '2px solid #ca0c0c', color: '#ca0c0c' }; 
+                return { border: '2px solid #ca0c0c', color: '#ca0c0c' };
             case 'Important':
                 return { border: '2px solid #044b9e', color: '#044b9e' };
             case 'Standard':
-                return { border: '2px solid #04779e', color: '#04779e' }; 
+                return { border: '2px solid #04779e', color: '#04779e' };
             case 'Low Priority':
-                return { border: '2px solid #9e5404', color: '#9e5404' }; 
+                return { border: '2px solid #9e5404', color: '#9e5404' };
             case 'Decommissioned':
                 return { border: '2px solid #9e8004', color: '#9e8004' };
             default:
-                return { border: '2px solid #e0e0e0', color: '#e0e0e0' }; 
+                return { border: '2px solid #e0e0e0', color: '#e0e0e0' };
         }
     };
 
+    const handleFilterSelect = (filter, value) => {
+        setSelectedFilter(filter);
+        setSelectedFilterValue(value);
+    };
 
     return (
         <div className="monitor-container">
@@ -110,8 +121,8 @@ const Monitor = () => {
                 </div>
             </div>
             <div className="filters">
-                <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} /> 
-                <FilterDropdown onFilterSelect={setSelectedFilter} />
+                <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+                <FilterDropdown onFilterSelect={handleFilterSelect} />
             </div>
             {loading ? (
                 <div className="loading-container">
@@ -119,7 +130,7 @@ const Monitor = () => {
                         src="https://lottie.host/c7bc1931-f10a-42df-a962-6f47e6238daf/Mf2qmJCbvV.json" 
                         background="transparent" 
                         speed="1" 
-                        style={{ width: '400px', height: '400px' }} // Increased size
+                        style={{ width: '400px', height: '400px' }} 
                         loop 
                         autoplay>
                     </dotlottie-player>
