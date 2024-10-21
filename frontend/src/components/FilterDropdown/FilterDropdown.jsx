@@ -10,6 +10,7 @@ const FilterDropdown = ({ onFilterSelect }) => {
     const sidebarRef = useRef(null);
 
     const filters = [
+        'None',
         'Access Group',
         'Priority',
         'Status',
@@ -59,15 +60,25 @@ const FilterDropdown = ({ onFilterSelect }) => {
 
     const handleFilterChange = (filter) => {
         setSelectedFilter(filter);
-        setSidebarVisible(true);
-        setSidebarItems(filter === 'Access Group' ? accessGroupOptions : filter === 'Priority' ? priorityOptions : statusOptions);
-        setIsOpen(false);
+        if (filter !== 'None') {
+            setSidebarVisible(true);
+            setSidebarItems(filter === 'Access Group' ? accessGroupOptions : filter === 'Priority' ? priorityOptions : statusOptions);
+        } else {
+            setSidebarVisible(false); // Close sidebar if 'None' is selected
+            onFilterSelect('', '');
+        }
+        setIsOpen(false); // Close the dropdown
+    
     };
 
     const handleOptionSelect = (option) => {
-        onFilterSelect(selectedFilter, option);
-        setSelectedFilter('');
-        setSidebarVisible(false);
+        if (option !== 'None') {
+            onFilterSelect(selectedFilter, option);
+        }
+        setSelectedFilter(option === 'None' ? 'None' : ''); // Keep 'None' in the state for clarity
+        setSidebarVisible(false); // Ensure sidebar is hidden
+        setIsOpen(false);         // Close the dropdown
+    
     };
 
     return (

@@ -78,13 +78,14 @@ const Monitor = () => {
             server.last_ping.toLowerCase().includes(lowerCaseSearchTerm)
         );
 
-        const matchesFilter = selectedFilter && selectedFilterValue ? (
-            selectedFilter === 'Access Group' ? server.access_group === selectedFilterValue :
-            selectedFilter === 'Priority' ? server.priority === selectedFilterValue :
-            selectedFilter === 'Status' ? server.status === selectedFilterValue : true
-        ) : true;
+        const matchesFilter = selectedFilter === '' && selectedFilterValue === '' ? 
+        true : // When 'None' is selected, return true to show all records
+        (selectedFilter === 'Access Group' ? server.access_group === selectedFilterValue :
+        selectedFilter === 'Priority' ? server.priority === selectedFilterValue :
+        selectedFilter === 'Status' ? server.status === selectedFilterValue : true);
 
-        return matchesSearch && matchesFilter;
+    return matchesSearch && matchesFilter;
+
     });
 
     const getPriorityStyle = (priority) => {
@@ -109,6 +110,13 @@ const Monitor = () => {
     const handleFilterSelect = (filter, value) => {
         setSelectedFilter(filter);
         setSelectedFilterValue(value);
+
+        // Fetch all records if 'None' is selected
+        if (filter === 'None' && value === '') {
+            fetchServers(); // Fetch all records
+        } else {
+            setSidebarVisible(true); // Show sidebar for other filters
+        }
     };
 
     return (
