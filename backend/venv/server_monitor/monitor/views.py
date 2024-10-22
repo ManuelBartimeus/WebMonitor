@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Server
+from .models import Server, DowntimeLog  # Ensure you import the DowntimeLog model
 from ping3 import ping
 from django.utils import timezone
 from datetime import timedelta
@@ -33,27 +33,28 @@ class ServerListView(APIView):
             response_time = ping(server.ip_address)
             server_status = 'Active' if response_time is not None else 'Inactive'
 
+            if server_status == 'Inactive':
+                now = timezone.now()
 
-            # if server_status == 'Inactive':
-            #     now = timezone.now()
+                # if server.alert_sent_at and (now - server.alert_sent_at) > timedelta(minutes=30):
+                #     server.reset_alert()
 
-            #     if server.alert_sent_at and (now - server.alert_sent_at) > timedelta(minutes=30):
-            #         server.reset_alert()
+                # if server.alert_count == 0:
+                #     alert_degree = "LOW ALERT"
+                #     send_server_down_email(server.ip_address, alert_degree)
+                #     server.alert_sent_at = now
+                #     server.alert_count = 1
+                # elif server.alert_count == 1 and (now - server.alert_sent_at) <= timedelta(seconds=18000):
+                #     alert_degree = "MEDIUM ALERT"
+                #     send_server_down_email(server.ip_address, alert_degree)
+                #     server.alert_count = 2
+                # elif server.alert_count == 2 and (now - server.alert_sent_at) <= timedelta(seconds=18000):
+                #     alert_degree = "HIGH ALERT"
+                #     send_server_down_email(server.ip_address, alert_degree)
+                #     server.alert_count = 3
 
-            #     if server.alert_count == 0:
-            #         alert_degree = "LOW ALERT"
-            #         send_server_down_email(server.ip_address, alert_degree)
-            #         server.alert_sent_at = now
-            #         server.alert_count = 1
-            #     elif server.alert_count == 1 and (now - server.alert_sent_at) <= timedelta(seconds=18000):
-            #         alert_degree = "MEDIUM ALERT"
-            #         send_server_down_email(server.ip_address, alert_degree)
-            #         server.alert_count = 2
-            #     elif server.alert_count == 2 and (now - server.alert_sent_at) <= timedelta(seconds=18000):
-            #         alert_degree = "HIGH ALERT"
-            #         send_server_down_email(server.ip_address, alert_degree)
-            #         server.alert_count = 3
-
+                # Log the downtime
+                DowntimeLog.objects.create(server=server, reason='Server is unreachable')
 
             # Update server status and last ping time
             server.status = server_status
@@ -98,3 +99,17 @@ class ServerListView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Server.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+# New view to retrieve downtime logs
+class DowntimeLogView(APIView):
+    def get(self, request, ip_address):
+        try:
+            server = Server.objects.get(ip_address=ip_address)
+            logs = DowntimeLog.objects.filter(server=server).order_by('-timestamp')
+            log_data = [{
+                'timestamp': log.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
+                'reason': log.reason
+            } for log in logs]
+            return Response({'logs': log_data}, status=status.HTTP_200_OK)
+        except Server.DoesNotExist:
+            return Response({'error': 'Server not found'}, status=status.HTTP_404_NOT_FOUND)

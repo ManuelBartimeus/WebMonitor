@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import './ServerDetail.css';
 import { IoMdInformationCircleOutline } from 'react-icons/io';
 import chart1 from './chart1.png';
@@ -8,6 +9,20 @@ import chart3 from './chart3.png';
 
 const ServerDetail = () => {
     const { ip } = useParams(); 
+
+    const [logs, setLogs] = useState([]);
+
+    useEffect(() => {
+        const fetchLogs = async () => {
+            try {
+                const response = await axios.get(`http://127.0.0.1:8000/api/logs/${ip}/`);
+                setLogs(response.data.logs);
+            } catch (error) {
+                console.error("Error fetching logs", error);
+            }
+        };
+        fetchLogs();
+    }, [ip]);
 
     return (
         <div className="server-detail-container">
@@ -45,8 +60,28 @@ const ServerDetail = () => {
                         <p>76%</p>
                     </div>
                 </div>
-
             </div>
+
+            <div className="logs-section">
+                <h4>Downtime Logs</h4>
+                <table className="logs-table">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Reason</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {logs.map((log, index) => (
+                            <tr key={index}>
+                                <td>{new Date(log.timestamp).toLocaleString()}</td>
+                                <td>{log.reason}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+
         </div>
 
     );

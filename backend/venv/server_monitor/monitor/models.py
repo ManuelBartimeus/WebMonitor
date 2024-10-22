@@ -21,7 +21,7 @@ class Server(models.Model):
     ip_address = models.GenericIPAddressField(unique=True)
     server_name = models.CharField(max_length=100)  # Field for Server Name
     access_group = models.CharField(max_length=50, choices=ACCESS_GROUP_CHOICES)  # Field for Access Group with choices
-    priority = models.CharField(max_length=20, choices= SERVER_LEVEL_CHOICES)  # Field for Priority
+    priority = models.CharField(max_length=20, choices=SERVER_LEVEL_CHOICES)  # Field for Priority
     status = models.CharField(max_length=10, default="Unknown")  # Optional
     last_ping = models.DateTimeField(auto_now=True)
     alert_sent_at = models.DateTimeField(null=True, blank=True)  # Time of the first alert
@@ -34,3 +34,11 @@ class Server(models.Model):
 
     def __str__(self):
         return f"{self.server_name} ({self.ip_address})"  # Update the string representation
+
+class DowntimeLog(models.Model):
+    server = models.ForeignKey(Server, on_delete=models.CASCADE, related_name='downtime_logs')  # Relation to Server
+    timestamp = models.DateTimeField(auto_now_add=True)  # When the downtime occurred
+    reason = models.CharField(max_length=255)  # Reason for downtime
+
+    def __str__(self):
+        return f"{self.server.server_name} went down at {self.timestamp}"  # Update the string representation
