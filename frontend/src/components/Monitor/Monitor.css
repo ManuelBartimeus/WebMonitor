@@ -158,15 +158,6 @@
   transform: scale(1.05);
 }
 
-.error-message-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: calc(100vh - 300px); 
-  text-align: center;
-  color: #000000; /* Optional: Change the text color to something noticeable */
-}
-
 .filter-icon {
   display: flex;
   align-items: center;

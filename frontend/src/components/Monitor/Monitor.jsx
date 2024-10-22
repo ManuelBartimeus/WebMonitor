@@ -26,7 +26,7 @@ const Monitor = () => {
             setServers(response.data);
             setError(null);
         } catch (err) {
-            setError('Reconnecting to database...');
+            setError('Reconnecting...');
             console.error(err);
             setTimeout(() => {
                 fetchServers();
