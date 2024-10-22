@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './ServerDetail.css';
 import { IoMdInformationCircleOutline } from 'react-icons/io';
+import { GrInbox } from "react-icons/gr";
 import chart1 from './chart1.png';
 import chart2 from './chart2.png';
 import chart3 from './chart3.png';
@@ -29,7 +30,7 @@ const ServerDetail = () => {
             <h2>Server Details<IoMdInformationCircleOutline /></h2>
 
             <div className="overview-section">
-                <hr></hr>
+                <hr />
                 <h4>Server Name: {ip}</h4>
                 <h4>Server IP Address: {ip} </h4>
             </div>
@@ -64,29 +65,46 @@ const ServerDetail = () => {
 
             <div className="logs-section">
                 <h4>Downtime Logs</h4>
-                <table className="logs-table">
-                    <thead>
-                        <tr>
-                            <th>Timestamp</th>
-                            <th>Reason</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {logs.map((log, index) => (
-                            <tr key={index}>
-                                <td>{new Date(log.timestamp).toLocaleString()}</td>
-                                <td>{log.reason}</td>
+                {logs.length === 0 ? ( 
+                    <div className="no-logs">
+                        <GrInbox className="no-logs-icon" size={40}/> 
+                        <p>No logs available</p> 
+                    </div>
+                ) : (
+                    <table className="logs-table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Timestamp</th>
+                                <th>Reason</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {logs.map((log, index) => (
+                                <tr key={index}>
+                                    <td>
+                                        <div
+                                            className="status-dot"
+                                            style={{
+                                                backgroundColor: '#5a5d59',
+                                                height: '10px',
+                                                width: '10px',
+                                                borderRadius: '50%',
+                                                display: 'inline-block',
+                                                marginLeft: '10px',
+                                            }}
+                                        ></div>
+                                    </td>
+                                    <td>{new Date(log.timestamp).toLocaleString()}</td>
+                                    <td>{log.reason}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
             </div>
-
         </div>
-
     );
 };
 
 export default ServerDetail;
-
-
