@@ -13,12 +13,9 @@ class Server(models.Model):
     ]
 
     SERVER_LEVEL_CHOICES = [
-        ('Critical', 'Critical'),
-        ('High Priority', 'High Priority'),
-        ('Important', 'Important'),
-        ('Standard', 'Standard'),
-        ('Low Priority', 'Low Priority'),
-        ('Decommissioned', 'Decommissioned'),
+        ('High', 'High'),
+        ('Medium', 'Medium'),
+        ('Low', 'Low'),
     ]
 
     ip_address = models.GenericIPAddressField(unique=True)

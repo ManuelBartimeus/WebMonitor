@@ -29,12 +29,9 @@ const FilterDropdown = ({ onFilterSelect }) => {
     ];
 
     const priorityOptions = [
-        'Critical',
-        'High Priority',
-        'Important',
-        'Standard',
-        'Low Priority',
-        'Decommissioned',
+        'High',
+        'Medium',
+        'Low',
     ];
 
     const statusOptions = [
