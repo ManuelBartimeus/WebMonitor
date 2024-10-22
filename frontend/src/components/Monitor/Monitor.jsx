@@ -7,6 +7,8 @@ import ExportModal from '../ExportModal/ExportModal';
 import Search from '../Search/Search';
 import { MdOutlineDelete } from "react-icons/md";
 import FilterDropdown from '../FilterDropdown/FilterDropdown';
+import { IoFilterCircleOutline } from "react-icons/io5";
+import { LuSearchX } from "react-icons/lu";
 
 const Monitor = () => {
     const [servers, setServers] = useState([]);
@@ -132,7 +134,12 @@ const Monitor = () => {
             <div className="filters">
                 <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
                 <FilterDropdown onFilterSelect={handleFilterSelect} />
+                <div className="filter-icon">
+                    <p><IoFilterCircleOutline className = "custome-filter-icon"/>
+                    {selectedFilterValue}</p>
+                </div>
             </div>
+
             {loading ? (
                 <div className="loading-container">
                     <dotlottie-player 
@@ -155,6 +162,11 @@ const Monitor = () => {
                         autoplay>
                     </dotlottie-player>
                     <p>{error}</p>
+                </div>
+            ) : filteredServers.length === 0 ? (
+                <div className="no-records-container">
+                    <LuSearchX className="no-records-icon" />
+                    <p>No records found</p>
                 </div>
             ) : (
                 <div className="scrollable-tbody">

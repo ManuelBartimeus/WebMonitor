@@ -99,7 +99,7 @@
 
 .filters {
   display: flex;
-  gap: 15px;
+  gap: 10px;
   margin-bottom: 12px;
 }
 
@@ -165,4 +165,40 @@
   height: calc(100vh - 300px); 
   text-align: center;
   color: #000000; /* Optional: Change the text color to something noticeable */
+}
+
+.filter-icon {
+  display: flex;
+  align-items: center;
+}
+
+.custom-filter-icon {
+  margin-right: 8px;
+}
+
+
+.filter-icon p {
+  display: flex;
+  align-items: center;
+  color: #7c7c7c;
+  font-size: 12px;
+}
+
+.no-records-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px; /* Adjust based on your layout */
+  margin-top: 100px;
+}
+
+.no-records-container p{
+  margin-top: 10px;
+}
+
+.no-records-icon {
+  font-size: 48px; /* Adjust size */
+  color: #b52e25;  /* Adjust color */
+  margin-bottom: 10px;
 }
