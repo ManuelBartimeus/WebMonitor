@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './ServerDetail.css';
@@ -8,13 +8,18 @@ import chart1 from '../../assets/chart1.png';
 import chart2 from '../../assets/chart2.png';
 import chart3 from '../../assets/chart3.png';
 import { FaChevronDown } from "react-icons/fa";
+import { IoCloseCircle } from "react-icons/io5";
+import { MdInfoOutline } from "react-icons/md";
+
 
 const ServerDetail = () => {
     const { ip } = useParams(); 
 
     const [logs, setLogs] = useState([]);
-    const [dropdownOpen, setDropdownOpen] = useState(false);  // State to manage dropdown visibility
-    const dropdownRef = useRef(null);  // Ref to detect clicks outside
+    const [isModalOpen, setIsModalOpen] = useState(false);  // State to manage modal visibility
+    const [receiveAlerts, setReceiveAlerts] = useState(false); // State for toggle button
+    const [alertFrequency, setAlertFrequency] = useState('1 minute'); // Default value for frequency
+    const [alertDelay, setAlertDelay] = useState('No Delay'); // Default value for delay
 
     useEffect(() => {
         const fetchLogs = async () => {
@@ -27,20 +32,6 @@ const ServerDetail = () => {
         };
         fetchLogs();
     }, [ip]);
-
-    // Handle clicks outside of dropdown
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setDropdownOpen(false);  // Close dropdown if click is outside
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
 
     return (
         <div className="server-detail-container">
@@ -62,28 +53,94 @@ const ServerDetail = () => {
                 <div className="email-settings">
                     <button 
                         className="alert-button" 
-                        onClick={() => setDropdownOpen(!dropdownOpen)}
+                        onClick={() => setIsModalOpen(true)} // Open modal on click
                     >
                         <div className="alert-icon">
-                            <p>Email Settings <FaChevronDown /></p>
+                            <p>Alert Settings <FaChevronDown /></p>
                         </div>
                     </button>
-
-                    {/* Dropdown for Email Settings */}
-                    {dropdownOpen && (
-                        <div className="email-dropdown" ref={dropdownRef}>
-                            <label>
-                                <input type="checkbox" name="1-minute" />
-                                1 minute
-                            </label>
-                            <br />
-                            <label>
-                                <input type="checkbox" name="2-minute" />
-                                2 minutes
-                            </label>
-                        </div>
-                    )}
                 </div>
+
+                {/* Modal for Email Settings */}
+                {isModalOpen && (
+                    <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>  {/* Close modal when clicking outside */}
+                        <div className="modal-content" onClick={(e) => e.stopPropagation()}>  {/* Prevent modal close when clicking inside */}
+                            <div className="modal-header">
+                                <h3>Alert Settings</h3>
+                                <button className="close-button" onClick={() => setIsModalOpen(false)}><IoCloseCircle /></button>
+                            </div>
+                            <hr />
+                            <div className="modal-body">
+                                <div className="toggle-container">
+                                    <span>Receive Email Alerts</span>
+                                    <div 
+                                        className={`toggle-button ${receiveAlerts ? 'active' : ''}`} 
+                                        onClick={() => setReceiveAlerts(!receiveAlerts)}
+                                        style={{
+                                            backgroundColor: receiveAlerts ? '#c31a21' : 'gray',
+                                            width: '50px',
+                                            height: '24px',
+                                            borderRadius: '12px',
+                                            position: 'relative',
+                                            cursor: 'pointer',
+                                        }}
+                                    >
+                                        <div 
+                                            className="toggle-knob" 
+                                            style={{
+                                                backgroundColor: 'white',
+                                                height: '20px',
+                                                width: '20px',
+                                                borderRadius: '50%',
+                                                position: 'absolute',
+                                                top: '2px',
+                                                left: receiveAlerts ? '28px' : '2px',
+                                                transition: 'left 0.2s',
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="dropdown-group">
+                                    <label>Alert Frequency:</label>
+                                    <select 
+                                        value={alertFrequency} 
+                                        onChange={(e) => setAlertFrequency(e.target.value)}
+                                    >
+                                        <option value="Default">Default</option>
+                                        <option value="1 minute">Every 1 minute</option>
+                                        <option value="5 minutes">Every 5 minutes</option>
+                                        <option value="10 minutes">Every 10 minutes</option>
+                                        <option value="30 minutes">Every 30 minutes</option>
+                                    </select>
+                                    <div className="label-info-container">
+                                        <p className="label-info"><MdInfoOutline />Frequency for alert notification during server downtime</p>
+                                    </div>
+                                </div>
+                                <div className="dropdown-group">
+                                    <label>Alert Delay:</label>
+                                    <select 
+                                        value={alertDelay} 
+                                        onChange={(e) => setAlertDelay(e.target.value)}
+                                    >
+                                        <option value="No Delay">No Delay</option>
+                                        <option value="1 minute">1 minute</option>
+                                        <option value="5 minutes">5 minutes</option>
+                                        <option value="10 minutes">10 minutes</option>
+                                    </select>
+                                    <div className="label-info-container">
+                                        <p className="label-info"><MdInfoOutline />Notification buffer time after first server failure</p>
+                                    </div>
+                                </div>
+
+                                <div className="modal-button">
+                                    <button className="modal-button-save">Save</button>
+                                    <button className="modal-button-cancel" onClick={() => setIsModalOpen(false)}>Cancel</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
 
             <div className="stats-section">

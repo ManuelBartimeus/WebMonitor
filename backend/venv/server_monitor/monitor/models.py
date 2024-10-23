@@ -44,8 +44,10 @@ class DowntimeLog(models.Model):
 
     def update_duration(self, recovery_time):
         """Update the duration with the time when the server came back online."""
-        self.duration = recovery_time - self.timestamp
-        self.save()
+        calculated_duration = recovery_time - self.timestamp
+        if calculated_duration.total_seconds() >= 1:
+            self.duration = calculated_duration
+            self.save()
 
     def formatted_duration(self):
         """Format duration as HH:MM:SS."""
