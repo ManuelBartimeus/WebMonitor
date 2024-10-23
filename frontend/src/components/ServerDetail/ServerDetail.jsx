@@ -4,9 +4,10 @@ import axios from 'axios';
 import './ServerDetail.css';
 import { IoMdInformationCircleOutline } from 'react-icons/io';
 import { GrInbox } from "react-icons/gr";
-import chart1 from './chart1.png';
-import chart2 from './chart2.png';
-import chart3 from './chart3.png';
+import chart1 from '../../assets/chart1.png';
+import chart2 from '../../assets/chart2.png';
+import chart3 from '../../assets/chart3.png';
+import { FaChevronDown } from "react-icons/fa";
 
 const ServerDetail = () => {
     const { ip } = useParams(); 
@@ -29,10 +30,25 @@ const ServerDetail = () => {
         <div className="server-detail-container">
             <h2>Server Details<IoMdInformationCircleOutline /></h2>
 
+            <hr />
             <div className="overview-section">
-                <hr />
-                <h4>Server Name: {ip}</h4>
-                <h4>Server IP Address: {ip} </h4>
+                    <div className="server-info">
+                        <h3 className="info-header">Server Name:&nbsp;&nbsp;</h3>
+                        <h4>{ip}</h4>
+                    </div>
+
+                    <div className="server-info">
+                        <h3 className="info-header">IP Address:&nbsp;&nbsp;</h3>
+                        <h4>{ip}</h4>
+                    </div>
+
+                    <button className="alert-button">
+                        <div className="alert-icon">
+                            <p>Email Settings
+                            <FaChevronDown /></p>
+                        </div>
+                    </button>
+
             </div>
 
             <div className="stats-section">

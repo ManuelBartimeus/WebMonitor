@@ -20,14 +20,61 @@
   color: #7c7c7c;
 }
 
-.overview-section {
-  margin-bottom: 40px;
+.server-detail-container hr {
+    margin-bottom: 30px;
 }
 
-.overview-section h4 {
-  margin-top: 15px;
-  font-size: 16px;
+.overview-section {
+  margin-bottom: 40px;
+  margin-left: 5px;
+  display: flex;
+  gap: 10px;
+}
+
+.server-info {
+    background-color: #26262626;
+    color: #363636;
+    border-radius: 45px;
+    min-width: 250px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 5px;
+    padding: 10px 20px;
+}
+
+.server-info h4 {
+  font-size: 15px;
   font-weight: 400;
+}
+
+.info-header {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.alert-button {
+    background-color: transparent;
+    color: #363636;
+    border-color: #f90000bb;
+    border-radius: 45px;
+    width: 150px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.alert-icon svg {
+    width:11px;
+    height: 11px;
+    margin-left: 7px;
+    color: #363636;
+}
+
+.alert-button:hover {
+    background-color: #fff9f9;
 }
 
 /* Stats Section */
