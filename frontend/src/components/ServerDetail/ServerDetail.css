@@ -162,3 +162,21 @@
 .no-logs-icon {
     color: #33333397;
 }
+
+.email-settings {
+    position: relative; /* Ensure dropdown is positioned relative to this element */
+}
+
+.email-dropdown {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    margin-left: 10px;
+    z-index: 1;
+    width: 150px;
+    height: 70px;
+}

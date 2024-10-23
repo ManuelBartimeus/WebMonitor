@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from datetime import timedelta
 
 class Server(models.Model):
     ACCESS_GROUP_CHOICES = [
@@ -39,6 +40,21 @@ class DowntimeLog(models.Model):
     server = models.ForeignKey(Server, on_delete=models.CASCADE, related_name='downtime_logs')  # Relation to Server
     timestamp = models.DateTimeField(auto_now_add=True)  # When the downtime occurred
     reason = models.CharField(max_length=255)  # Reason for downtime
+    duration = models.DurationField(null=True, blank=True)  # Duration of downtime
+
+    def update_duration(self, recovery_time):
+        """Update the duration with the time when the server came back online."""
+        self.duration = recovery_time - self.timestamp
+        self.save()
+
+    def formatted_duration(self):
+        """Format duration as HH:MM:SS."""
+        if self.duration:
+            total_seconds = int(self.duration.total_seconds())
+            hours, remainder = divmod(total_seconds, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            return f"{hours:02}:{minutes:02}:{seconds:02}"
+        return 'Ongoing'  # If no duration, return 'Ongoing'
 
     def __str__(self):
         return f"{self.server.server_name} went down at {self.timestamp}"  # Update the string representation

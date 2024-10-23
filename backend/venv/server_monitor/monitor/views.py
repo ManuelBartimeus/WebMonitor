@@ -36,6 +36,15 @@ class ServerListView(APIView):
             if server_status == 'Inactive':
                 now = timezone.now()
 
+                # Check if there is already a downtime log for this server that hasn't ended
+                active_downtime_log = DowntimeLog.objects.filter(server=server, duration__isnull=True).last()
+                
+                if active_downtime_log:
+                    active_downtime_log.update_duration()  # Update the duration continuously
+                else:
+                    DowntimeLog.objects.create(server=server, reason='Server is unreachable')
+
+
                 # if server.alert_sent_at and (now - server.alert_sent_at) > timedelta(minutes=30):
                 #     server.reset_alert()
 
@@ -53,8 +62,11 @@ class ServerListView(APIView):
                 #     send_server_down_email(server.ip_address, alert_degree)
                 #     server.alert_count = 3
 
-                # Log the downtime
-                DowntimeLog.objects.create(server=server, reason='Server is unreachable')
+            
+            elif server_status == 'Active':
+                active_downtime_log = DowntimeLog.objects.filter(server=server, duration__isnull=True).last()
+                if active_downtime_log:
+                    active_downtime_log.update_duration(timezone.now()) # Finalize the downtime duration
 
             # Update server status and last ping time
             server.status = server_status
@@ -108,7 +120,8 @@ class DowntimeLogView(APIView):
             logs = DowntimeLog.objects.filter(server=server).order_by('-timestamp')
             log_data = [{
                 'timestamp': log.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
-                'reason': log.reason
+                'reason': log.reason,
+                'duration': log.formatted_duration()  # Use the formatted_duration method
             } for log in logs]
             return Response({'logs': log_data}, status=status.HTTP_200_OK)
         except Server.DoesNotExist:

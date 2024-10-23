@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './ServerDetail.css';
@@ -13,6 +13,8 @@ const ServerDetail = () => {
     const { ip } = useParams(); 
 
     const [logs, setLogs] = useState([]);
+    const [dropdownOpen, setDropdownOpen] = useState(false);  // State to manage dropdown visibility
+    const dropdownRef = useRef(null);  // Ref to detect clicks outside
 
     useEffect(() => {
         const fetchLogs = async () => {
@@ -26,29 +28,62 @@ const ServerDetail = () => {
         fetchLogs();
     }, [ip]);
 
+    // Handle clicks outside of dropdown
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setDropdownOpen(false);  // Close dropdown if click is outside
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     return (
         <div className="server-detail-container">
             <h2>Server Details<IoMdInformationCircleOutline /></h2>
 
             <hr />
             <div className="overview-section">
-                    <div className="server-info">
-                        <h3 className="info-header">Server Name:&nbsp;&nbsp;</h3>
-                        <h4>{ip}</h4>
-                    </div>
+                <div className="server-info">
+                    <h3 className="info-header">Server Name:&nbsp;&nbsp;</h3>
+                    <h4>{ip}</h4>
+                </div>
 
-                    <div className="server-info">
-                        <h3 className="info-header">IP Address:&nbsp;&nbsp;</h3>
-                        <h4>{ip}</h4>
-                    </div>
+                <div className="server-info">
+                    <h3 className="info-header">IP Address:&nbsp;&nbsp;</h3>
+                    <h4>{ip}</h4>
+                </div>
 
-                    <button className="alert-button">
+                {/* Email Settings Button */}
+                <div className="email-settings">
+                    <button 
+                        className="alert-button" 
+                        onClick={() => setDropdownOpen(!dropdownOpen)}
+                    >
                         <div className="alert-icon">
-                            <p>Email Settings
-                            <FaChevronDown /></p>
+                            <p>Email Settings <FaChevronDown /></p>
                         </div>
                     </button>
 
+                    {/* Dropdown for Email Settings */}
+                    {dropdownOpen && (
+                        <div className="email-dropdown" ref={dropdownRef}>
+                            <label>
+                                <input type="checkbox" name="1-minute" />
+                                1 minute
+                            </label>
+                            <br />
+                            <label>
+                                <input type="checkbox" name="2-minute" />
+                                2 minutes
+                            </label>
+                        </div>
+                    )}
+                </div>
             </div>
 
             <div className="stats-section">
@@ -92,6 +127,7 @@ const ServerDetail = () => {
                             <tr>
                                 <th></th>
                                 <th>Timestamp</th>
+                                <th>Duration</th>
                                 <th>Reason</th>
                             </tr>
                         </thead>
@@ -112,6 +148,7 @@ const ServerDetail = () => {
                                         ></div>
                                     </td>
                                     <td>{new Date(log.timestamp).toLocaleString()}</td>
+                                    <td>{log.duration}</td>
                                     <td>{log.reason}</td>
                                 </tr>
                             ))}
