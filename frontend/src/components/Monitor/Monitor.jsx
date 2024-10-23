@@ -194,10 +194,20 @@ const Monitor = () => {
                                         ></div>
                                     </td>
                                     <td>
-                                        <Link to={`/server/${server.ip_address}`}>{server.ip_address}</Link>
+                                        <Link
+                                            to={`/server/${server.ip_address}`}
+                                            state={{ serverName: server.server_name }}  
+                                        >
+                                            {server.ip_address}
+                                        </Link>
                                     </td>
                                     <td>
-                                        <Link to={`/server/${server.ip_address}`}>{server.server_name}</Link>
+                                        <Link
+                                            to={`/server/${server.ip_address}`}
+                                            state={{ serverName: server.server_name }}  
+                                        >
+                                            {server.server_name}
+                                        </Link>
                                     </td> 
                                     <td>{server.access_group}</td> 
                                     <td>

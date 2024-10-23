@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './ServerDetail.css';
 import { IoMdInformationCircleOutline } from 'react-icons/io';
@@ -14,6 +14,8 @@ import { MdInfoOutline } from "react-icons/md";
 
 const ServerDetail = () => {
     const { ip } = useParams(); 
+    const location = useLocation();
+    const { serverName } = location.state || {};
 
     const [logs, setLogs] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);  // State to manage modal visibility
@@ -41,7 +43,7 @@ const ServerDetail = () => {
             <div className="overview-section">
                 <div className="server-info">
                     <h3 className="info-header">Server Name:&nbsp;&nbsp;</h3>
-                    <h4>{ip}</h4>
+                    <h4>{serverName || "Unknown Server Name"}</h4> 
                 </div>
 
                 <div className="server-info">
