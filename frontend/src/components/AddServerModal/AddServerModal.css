@@ -19,7 +19,7 @@
     width: 350px;
     text-align: center;
     z-index: 1001; 
-    margin-left: 250px;
+    /* margin-left: 250px; */
 }
 
 .modal h2 {
