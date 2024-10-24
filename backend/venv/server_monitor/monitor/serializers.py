@@ -7,7 +7,8 @@ class ServerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Server
-        fields = ['ip_address', 'server_name', 'access_group', 'priority', 'status']  # Include new fields
+        fields = ['ip_address', 'server_name', 'access_group', 'priority', 'status', 'last_ping',
+                  'alert_permission', 'alert_frequency', 'alert_delay']  # Include new fields
 
     def get_status(self, obj):
         # Ping the IP address

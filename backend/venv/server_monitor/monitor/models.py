@@ -19,6 +19,21 @@ class Server(models.Model):
         ('Low', 'Low'),
     ]
 
+    ALERT_FREQUENCIES = [
+        ('default', 'Default (every 30 seconds)'),
+        ('1m', 'Every 1 minute'),
+        ('5m', 'Every 5 minutes'),
+        ('10m', 'Every 10 minutes'),
+        ('30m', 'Every 30 minutes'),
+    ]
+
+    ALERT_DELAYS = [
+        ('default', 'Default (No alert)'),
+        ('1m', '1 minute'),
+        ('5m', '5 minutes'),
+        ('10m', '10 minutes'),
+    ]
+
     ip_address = models.GenericIPAddressField(unique=True)
     server_name = models.CharField(max_length=100)  # Field for Server Name
     access_group = models.CharField(max_length=50, choices=ACCESS_GROUP_CHOICES)  # Field for Access Group with choices
@@ -28,10 +43,15 @@ class Server(models.Model):
     alert_sent_at = models.DateTimeField(null=True, blank=True)  # Time of the first alert
     alert_count = models.IntegerField(default=0)  # Number of alerts sent within the timeframe
 
+    alert_permission = models.BooleanField(default=True)
+    alert_frequency = models.CharField(max_length=10, choices=ALERT_FREQUENCIES, default='default')
+    alert_delay = models.CharField(max_length=10, choices=ALERT_DELAYS, default='default')
+
     def reset_alert(self):
         """Reset the alert count and alert time after 5 minutes."""
         self.alert_sent_at = None
         self.alert_count = 0
+        
 
     def __str__(self):
         return f"{self.server_name} ({self.ip_address})"  # Update the string representation

@@ -11,9 +11,7 @@ import { FaChevronDown } from "react-icons/fa";
 import { IoCloseCircle } from "react-icons/io5";
 import { MdInfoOutline } from "react-icons/md";
 import { LuRefreshCcw } from "react-icons/lu";
-import ExportModal from '../ExportModal/ExportModal';
 import DowntimeExport from '../DowntimeExport/DowntimeExport';
-
 
 const ServerDetail = () => {
     const { ip } = useParams(); 
@@ -27,17 +25,35 @@ const ServerDetail = () => {
     const [alertFrequency, setAlertFrequency] = useState('1 minute'); // Default value for frequency
     const [alertDelay, setAlertDelay] = useState('No Delay'); // Default value for delay
 
+    const fetchLogs = async () => {
+        try {
+            const response = await axios.get(`http://127.0.0.1:8000/api/logs/${ip}/`);
+            setLogs(response.data.logs);
+        } catch (error) {
+            console.error("Error fetching logs", error);
+        }
+    };
+
     useEffect(() => {
-        const fetchLogs = async () => {
-            try {
-                const response = await axios.get(`http://127.0.0.1:8000/api/logs/${ip}/`);
-                setLogs(response.data.logs);
-            } catch (error) {
-                console.error("Error fetching logs", error);
-            }
-        };
         fetchLogs();
     }, [ip]);
+
+    // Save Settings function
+    const saveSettings = async () => {
+        try {
+            const settingsData = {
+                receiveAlerts,
+                alertFrequency,
+                alertDelay,
+            };
+            await axios.post(`http://127.0.0.1:8000/api/settings/${ip}/`, settingsData);
+            alert("Settings saved successfully!");
+            setIsModalOpen(false); // Close the modal after saving
+        } catch (error) {
+            console.error("Error saving settings", error);
+            alert("Failed to save settings. Please try again.");
+        }
+    };
 
     return (
         <div className="server-detail-container">
@@ -139,7 +155,7 @@ const ServerDetail = () => {
                                 </div>
 
                                 <div className="modal-button">
-                                    <button className="modal-button-save">Save</button>
+                                    <button className="modal-button-save" onClick={saveSettings}>Save</button> {/* Call saveSettings on button click */}
                                     <button className="modal-button-cancel" onClick={() => setIsModalOpen(false)}>Cancel</button>
                                 </div>
 
@@ -180,7 +196,7 @@ const ServerDetail = () => {
             <div className="logs-section">
                 <div className="log-header">
                     <h4>Downtime Logs</h4>
-                    <LuRefreshCcw className="refresh-button" onClick={() => fetchLogs()}/>
+                    <LuRefreshCcw className="refresh-button" onClick={fetchLogs} />
                     <button className="export-detail-btn" onClick={() => setShowExportModal(true)}>Export</button>
                 </div>
                 {logs.length === 0 ? ( 
@@ -223,7 +239,10 @@ const ServerDetail = () => {
                     </table>
                 )}
                 {showExportModal && (
-                    <DowntimeExport onClose={() => setShowExportModal(false)} data={logs} />
+                    <DowntimeExport 
+                        onClose={() => setShowExportModal(false)} 
+                        ipAddress={ip} 
+                    />
                 )}
             </div>
         </div>
