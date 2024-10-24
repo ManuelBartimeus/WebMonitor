@@ -11,6 +11,8 @@ import { FaChevronDown } from "react-icons/fa";
 import { IoCloseCircle } from "react-icons/io5";
 import { MdInfoOutline } from "react-icons/md";
 import { LuRefreshCcw } from "react-icons/lu";
+import ExportModal from '../ExportModal/ExportModal';
+import DowntimeExport from '../DowntimeExport/DowntimeExport';
 
 
 const ServerDetail = () => {
@@ -20,6 +22,7 @@ const ServerDetail = () => {
 
     const [logs, setLogs] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);  // State to manage modal visibility
+    const [showExportModal, setShowExportModal] = useState(false);
     const [receiveAlerts, setReceiveAlerts] = useState(false); // State for toggle button
     const [alertFrequency, setAlertFrequency] = useState('1 minute'); // Default value for frequency
     const [alertDelay, setAlertDelay] = useState('No Delay'); // Default value for delay
@@ -202,7 +205,7 @@ const ServerDetail = () => {
                                         <div
                                             className="status-dot"
                                             style={{
-                                                backgroundColor: '#5a5d59',
+                                                backgroundColor: '#890d0dae',
                                                 height: '10px',
                                                 width: '10px',
                                                 borderRadius: '50%',
@@ -218,6 +221,9 @@ const ServerDetail = () => {
                             ))}
                         </tbody>
                     </table>
+                )}
+                {showExportModal && (
+                    <DowntimeExport onClose={() => setShowExportModal(false)} data={logs} />
                 )}
             </div>
         </div>

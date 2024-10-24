@@ -78,22 +78,22 @@
 }
 
 .add-btn {
-  background-color: #17a2b8;
+  background-color: #034480;
   color: white;
 }
 
 .add-btn:hover{
-  background-color: #158fa1;
+  background-color: #155ba1;
   color: white;
 }
 
 .export-btn {
-  background-color: #17a2b8;
+  background-color: #034480;
   color: white;
 }
 
 .export-btn:hover{
-  background-color: #158fa1;
+  background-color: #155ba1;
   color: white
 }
 

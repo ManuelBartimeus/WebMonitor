@@ -62,7 +62,7 @@
 }
 
 .refresh-button {
-    color: #890d0d;
+    color: #890d0dae;
     margin-right: 890px;
     margin-top: 4px;
     font-size: 14px;
@@ -75,6 +75,10 @@
 .export-detail-btn {
     background-color: #c71515;
     color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
   }
   
 .export-detail-btn:hover{
