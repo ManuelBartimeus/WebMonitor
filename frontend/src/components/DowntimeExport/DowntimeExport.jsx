@@ -1,14 +1,14 @@
 import React from 'react';
-import './ExportModal.css';
+import './DowntimeExport.css';
 
-const ExportModal = ({ onClose, data }) => {
+const DowntimeExport = ({ onClose, data }) => {
     const exportToCSV = () => {
         const csvRows = [];
-        const headers = ['IP Address', 'Server Name', 'Access Group', 'Priority', 'Status', 'Time Log']; // Update headers according to your data
+        const headers = ['Timestamp', 'Duration', 'Reason']; // Update headers according to your data
         csvRows.push(headers.join(','));
 
-        data.forEach(server => {
-            const row = [server.ip_address, server.server_name, server.access_group, server.priority, server.status, server.last_ping].join(',');
+        data.forEach(log => {
+            const row = [log.timestamp, log.duration, log.reason].join(',');
             csvRows.push(row);
         });
 
@@ -34,4 +34,4 @@ const ExportModal = ({ onClose, data }) => {
     );
 };
 
-export default ExportModal;
+export default DowntimeExport;

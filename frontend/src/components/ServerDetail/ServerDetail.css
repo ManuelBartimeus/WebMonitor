@@ -54,6 +54,34 @@
     font-weight: 700;
 }
 
+.log-header {
+    display: flex;
+    justify-content: space-between;
+    
+    padding-right: 20px;
+}
+
+.refresh-button {
+    color: #890d0d;
+    margin-right: 890px;
+    margin-top: 4px;
+    font-size: 14px;
+}
+
+.refresh-button:hover {
+    transform: scale(1.2);
+}
+
+.export-detail-btn {
+    background-color: #c71515;
+    color: white;
+  }
+  
+.export-detail-btn:hover{
+    background-color: #890d0d;
+    color: white
+}
+
 .alert-button {
     background-color: transparent;
     color: #363636;

@@ -10,6 +10,7 @@ import chart3 from '../../assets/chart3.png';
 import { FaChevronDown } from "react-icons/fa";
 import { IoCloseCircle } from "react-icons/io5";
 import { MdInfoOutline } from "react-icons/md";
+import { LuRefreshCcw } from "react-icons/lu";
 
 
 const ServerDetail = () => {
@@ -174,7 +175,11 @@ const ServerDetail = () => {
             </div>
 
             <div className="logs-section">
-                <h4>Downtime Logs</h4>
+                <div className="log-header">
+                    <h4>Downtime Logs</h4>
+                    <LuRefreshCcw className="refresh-button" onClick={() => fetchLogs()}/>
+                    <button className="export-detail-btn" onClick={() => setShowExportModal(true)}>Export</button>
+                </div>
                 {logs.length === 0 ? ( 
                     <div className="no-logs">
                         <GrInbox className="no-logs-icon" size={40}/> 
